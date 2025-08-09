@@ -1,5 +1,7 @@
 # Final Project
 
+![View addition info](FinalProject.pdf "Final Project PDF")
+
 # Usage Guide
 
 > Run Calculator Application
