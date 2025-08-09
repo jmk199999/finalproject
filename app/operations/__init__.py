@@ -118,3 +118,69 @@ def divide(a: Number, b: Number) -> float:
     # Perform division of a by b and return the result as a float
     result = a / b
     return result
+
+def modulus(a: Number, b: Number) -> float:
+    """
+    Divide the first number by the second and return the remainder.
+
+    Parameters:
+    - a (int or float): The dividend.
+    - b (int or float): The divisor.
+
+    Returns:
+    - float: The remainder of a divided by b.
+
+    Raises:
+    - ValueError: If b is zero, as division by zero is undefined.
+
+    Example:
+    >>> modulus(6, 3)
+    0
+    >>> modulus(5.5, 2)
+    1.5
+    >>> modulus(5, 0)
+    Traceback (most recent call last):
+        ...
+    ValueError: Cannot divide by zero!
+    """
+    # Check if the divisor is zero to prevent division by zero
+    if b == 0:
+        # Raise a ValueError with a descriptive message
+        raise ValueError("Cannot divide by zero!")
+    
+    # Perform division of a by b and return the result as a float
+    result = a % b
+    return result
+
+def intdiv(a: Number, b: Number) -> float:
+    """
+    Divide the first number by the second and return the integer quotient.
+
+    Parameters:
+    - a (int or float): The dividend.
+    - b (int or float): The divisor.
+
+    Returns:
+    - float: The quotient of a divided by b.
+
+    Raises:
+    - ValueError: If b is zero, as division by zero is undefined.
+
+    Example:
+    >>> intdiv(6, 3)
+    2
+    >>> intdiv(5.5, 2)
+    2
+    >>> intdiv(5, 0)
+    Traceback (most recent call last):
+        ...
+    ValueError: Cannot divide by zero!
+    """
+    # Check if the divisor is zero to prevent division by zero
+    if b == 0:
+        # Raise a ValueError with a descriptive message
+        raise ValueError("Cannot divide by zero!")
+    
+    # Perform division of a by b and return the result as a float
+    result = a // b
+    return result

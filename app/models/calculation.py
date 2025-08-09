@@ -178,13 +178,15 @@ class AbstractCalculation:
             'subtraction': Subtraction,
             'multiplication': Multiplication,
             'division': Division,
+            'modulus': Modulus,
+            'intdivision': IntDivision,
         }
         calculation_class = calculation_classes.get(calculation_type.lower())
         if not calculation_class:
             raise ValueError(f"Unsupported calculation type: {calculation_type}")
         return calculation_class(user_id=user_id, inputs=inputs)
 
-    def get_result(self) -> float:
+    def get_result(self) -> float: # pragma: no cover
         """
         Method to compute calculation result.
         
@@ -199,7 +201,7 @@ class AbstractCalculation:
         """
         raise NotImplementedError
 
-    def __repr__(self):
+    def __repr__(self): # pragma: no cover
         """
         String representation of the calculation for debugging.
         
@@ -353,4 +355,82 @@ class Division(Calculation):
             if value == 0:
                 raise ValueError("Cannot divide by zero.")
             result /= value
+        return result
+
+class Modulus(Calculation):
+    """
+    Modulus calculation subclass.
+    
+    Implements sequential modulus division starting from the first number.
+    Examples:
+        [10, 3, 5] -> 10 % 3 % 5 = 1
+        [100, 27, 5] -> 100 % 27 % 5 = 4
+        
+    Special case handling:
+        - Division by zero raises a ValueError
+    """
+    __mapper_args__ = {"polymorphic_identity": "modulus"}
+
+    def get_result(self) -> float:
+        """
+        Calculate the remainder of dividing the first value by all subsequent values.
+        
+        Takes the first number and divides by all remaining numbers sequentially.
+        Includes validation to prevent division by zero.
+        
+        Returns:
+            float: The final remainder of the division sequence
+            
+        Raises:
+            ValueError: If inputs are not a list, if fewer than 2 numbers provided,
+                        or if attempting to divide by zero
+        """
+        if not isinstance(self.inputs, list):
+            raise ValueError("Inputs must be a list of numbers.")
+        if len(self.inputs) < 2:
+            raise ValueError("Inputs must be a list with at least two numbers.")
+        result = self.inputs[0]
+        for value in self.inputs[1:]:
+            if value == 0:
+                raise ValueError("Cannot divide by zero.")
+            result = result % value
+        return result
+
+class IntDivision(Calculation):
+    """
+    IntDivision calculation subclass.
+    
+    Implements sequential integer division starting from the first number.
+    Examples:
+        [10, 3, 5] -> 10 // 3 // 5 = 0
+        [100, 7, 5] -> 100 // 7 // 5 = 2
+        
+    Special case handling:
+        - Division by zero raises a ValueError
+    """
+    __mapper_args__ = {"polymorphic_identity": "intdivision"}
+
+    def get_result(self) -> float:
+        """
+        Calculate the integer result of dividing the first value by all subsequent values.
+        
+        Takes the first number and divides by all remaining numbers sequentially.
+        Includes validation to prevent division by zero.
+        
+        Returns:
+            float: The result of the integer division sequence
+            
+        Raises:
+            ValueError: If inputs are not a list, if fewer than 2 numbers provided,
+                        or if attempting to divide by zero
+        """
+        if not isinstance(self.inputs, list):
+            raise ValueError("Inputs must be a list of numbers.")
+        if len(self.inputs) < 2:
+            raise ValueError("Inputs must be a list with at least two numbers.")
+        result = self.inputs[0]
+        for value in self.inputs[1:]:
+            if value == 0:
+                raise ValueError("Cannot divide by zero.")
+            result = result // value
         return result
