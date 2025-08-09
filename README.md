@@ -1,4 +1,28 @@
-# finalproject
+# Final Project
+
+# Usage Guide
+
+> Run Calculator Application
+
+```bash
+docker compose up --build
+```
+
+The **Calculations App** is a web-browser application that allows authorized users to  maintain a history of calculations they perform with their results.  Users must register an user name
+before being able to perform calculations.  Logged in users will be able to see and work with calculations that they have created.  Users can create new calculations and view their history 
+of calculations from the application dashboard, view details of any of their calculations from their history, edit any calculation they previously created with a preview of the potential
+chancge, or delete any calculation detail.
+
+**Acceptable Operations:**
+
+| Command                  | Calculation performed          |
+|--------------------------|--------------------------------|
+| `addition`               | **Addition** of the two numbers.    |
+| `subtraction`            | **Subtraction** of one number from the other. |
+| `multiplication`         | **Multiplication** of the two numbers.   |
+| `division`               | **Division** of one number from the other. |  
+| `modulus`                | Provides the **remainder** of dividing one number by the other. |
+| `intdivision`            | Provided the **integer quotient** of dividing one number by the other. |
 
 ---
 
