@@ -36,6 +36,8 @@ class CalculationType(str, Enum):
     SUBTRACTION = "subtraction"
     MULTIPLICATION = "multiplication"
     DIVISION = "division"
+    MODULUS = "modulus"
+    INTDIVISION = "intdivision"
 
 class CalculationBase(BaseModel):
     """
@@ -49,7 +51,7 @@ class CalculationBase(BaseModel):
     """
     type: CalculationType = Field(
         ...,  # The ... means this field is required
-        description="Type of calculation (addition, subtraction, multiplication, division)",
+        description="Type of calculation (addition, subtraction, multiplication, division, modulus, intdivision)",
         example="addition"
     )
     inputs: List[float] = Field(
@@ -126,7 +128,7 @@ class CalculationBase(BaseModel):
         """
         if len(self.inputs) < 2:
             raise ValueError("At least two numbers are required for calculation")
-        if self.type == CalculationType.DIVISION:
+        if (self.type == CalculationType.DIVISION) or (self.type == CalculationType.MODULUS) or (self.type == CalculationType.INTDIVISION):
             # Prevent division by zero (skip the first value as numerator)
             if any(x == 0 for x in self.inputs[1:]):
                 raise ValueError("Cannot divide by zero")

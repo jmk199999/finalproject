@@ -294,6 +294,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         result = inputs.reduce((a, b, i) => i === 0 ? a : a / b, inputs[0]);
         break;
+      case 'modulus':
+        // Avoid division by zero
+        if (inputs.some((value, index) => index > 0 && value === 0)) {
+          return 'Cannot divide by zero';
+        }
+        result = inputs.reduce((a, b, i) => i === 0 ? a : a % b, inputs[0]);
+        break;
+      case 'intdivision':
+        // Avoid division by zero
+        if (inputs.some((value, index) => index > 0 && value === 0)) {
+          return 'Cannot divide by zero';
+        }
+        result = inputs.reduce((a, b, i) => i === 0 ? a : Math.trunc(a / b), inputs[0]);
+        break;
       default:
         return 'Unknown operation';
     }
@@ -329,6 +343,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         break;
       case 'division':
         operator = '÷';
+        break;
+      case 'modulus':
+        operator = '%';
+        break;
+      case 'intdivision':
+        operator = '/';
         break;
       default:
         operator = '?';
@@ -459,7 +479,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     // Check for division by zero
-    if (calcTypeInput.value === 'division' && newInputs.some((value, index) => index > 0 && value === 0)) {
+    if (((calcTypeInput.value === 'division') || (calcTypeInput.value === 'modulus') || (calcTypeInput.value === 'intdivision')) && newInputs.some((value, index) => index > 0 && value === 0)) {
       showError('Division by zero is not allowed.');
       return;
     }

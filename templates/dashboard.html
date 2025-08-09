@@ -54,6 +54,8 @@
           <option value="subtraction">Subtraction</option>
           <option value="multiplication">Multiplication</option>
           <option value="division">Division</option>
+          <option value="modulus">Modulus</option>
+          <option value="intdivision">Integer Division</option>
         </select>
       </div>
       <!-- Inputs -->
@@ -268,6 +270,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const row = document.createElement('tr');
         row.classList.add('hover:bg-gray-50', 'transition-colors');
         
+        let outtype = (calc.type == "intdivision") ? "Integer Division" : calc.type;
+
         // Format the date nicely
         const calcDate = new Date(calc.created_at);
         const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -276,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         row.innerHTML = `
           <td class="px-6 py-4 text-gray-800 whitespace-nowrap">
-            <span class="font-medium capitalize">${calc.type}</span>
+            <span class="font-medium capitalize">${outtype}</span>
           </td>
           <td class="px-6 py-4 text-gray-800 whitespace-nowrap">
             ${calc.inputs.join(', ')}

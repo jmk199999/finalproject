@@ -102,7 +102,6 @@ def test_create_refresh_token(mock_settings, test_user_id):
 # --- decode_token tests ---
 
 @patch("app.auth.jwt.settings")
-@pytest.mark.asyncio
 async def test_decode_token_success(mock_settings, mock_redis_blacklist, create_mock_token_payload):
     mock_settings.JWT_SECRET_KEY = "test_access_secret"
     mock_settings.ALGORITHM = "HS256"
@@ -115,7 +114,6 @@ async def test_decode_token_success(mock_settings, mock_redis_blacklist, create_
     assert decoded_payload["sub"] == payload_data["sub"]
 
 @patch("app.auth.jwt.settings")
-@pytest.mark.asyncio
 async def test_decode_token_expired(mock_settings, mock_redis_blacklist, create_mock_token_payload):
     mock_settings.JWT_SECRET_KEY = "test_access_secret"
     mock_settings.ALGORITHM = "HS256"
@@ -130,7 +128,6 @@ async def test_decode_token_expired(mock_settings, mock_redis_blacklist, create_
     assert excinfo.value.detail == "Token has expired"
 
 @patch("app.auth.jwt.settings")
-@pytest.mark.asyncio
 async def test_decode_token_invalid_signature(mock_settings, mock_redis_blacklist):
     mock_settings.JWT_SECRET_KEY = "test_access_secret"
     mock_settings.ALGORITHM = "HS256"
@@ -143,7 +140,6 @@ async def test_decode_token_invalid_signature(mock_settings, mock_redis_blacklis
     assert excinfo.value.detail == "Could not validate credentials"
 
 @patch("app.auth.jwt.settings")
-@pytest.mark.asyncio
 async def test_decode_token_revoked(mock_settings, mock_redis_blacklist, create_mock_token_payload):
     mock_settings.JWT_SECRET_KEY = "test_access_secret"
     mock_settings.ALGORITHM = "HS256"
@@ -174,7 +170,6 @@ def mock_user_db_query(test_user_id):
     mock_user.is_active = True
     return mock_user
 
-@pytest.mark.asyncio
 @patch("app.auth.jwt.decode_token", new_callable=AsyncMock)
 async def test_get_current_user_success(mock_decode_token, mock_db_session, mock_user_db_query, test_user_id):
     mock_decode_token.return_value = {"sub": test_user_id, "type": "access"}
@@ -187,7 +182,6 @@ async def test_get_current_user_success(mock_decode_token, mock_db_session, mock
     mock_db_session.query.return_value.filter.return_value.first.assert_called_once()
 
 
-@pytest.mark.asyncio
 @patch("app.auth.jwt.decode_token", new_callable=AsyncMock)
 async def test_get_current_user_inactive_user(mock_decode_token, mock_db_session, mock_user_db_query, test_user_id):
     mock_decode_token.return_value = {"sub": test_user_id, "type": "access"}
@@ -200,7 +194,6 @@ async def test_get_current_user_inactive_user(mock_decode_token, mock_db_session
     assert excinfo.value.status_code == status.HTTP_400_BAD_REQUEST
     assert excinfo.value.detail == "Inactive user"
 
-@pytest.mark.asyncio
 @patch("app.auth.jwt.decode_token", new_callable=AsyncMock)
 async def test_get_current_user_not_found(mock_decode_token, mock_db_session, test_user_id):
     mock_decode_token.return_value = {"sub": test_user_id, "type": "access"}
@@ -212,7 +205,6 @@ async def test_get_current_user_not_found(mock_decode_token, mock_db_session, te
     assert excinfo.value.status_code == status.HTTP_404_NOT_FOUND
     assert excinfo.value.detail == "User not found"
 
-@pytest.mark.asyncio
 @patch("app.auth.jwt.decode_token", new_callable=AsyncMock)
 async def test_get_current_user_invalid_token(mock_decode_token, mock_db_session):
     """
